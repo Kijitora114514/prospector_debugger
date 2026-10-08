@@ -65,9 +65,10 @@ For more information on ZMK Modules and building locally, see [the ZMK docs page
 
 ## Status Screens
 
-Classic is used by default. To choose a different screen, add one of the following to your `.conf` file:
+Debugger is used by default. To choose a different screen, add one of the following to your `.conf` file:
 
 ```ini
+CONFIG_PROSPECTOR_STATUS_SCREEN_CLASSIC=y
 CONFIG_PROSPECTOR_STATUS_SCREEN_RADII=y
 CONFIG_PROSPECTOR_STATUS_SCREEN_FIELD=y
 CONFIG_PROSPECTOR_STATUS_SCREEN_OPERATOR=y

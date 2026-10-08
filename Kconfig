@@ -1,6 +1,11 @@
 choice PROSPECTOR_STATUS_SCREEN_LAYOUT
     prompt "Status screen layout"
-    default PROSPECTOR_STATUS_SCREEN_CLASSIC
+    default PROSPECTOR_STATUS_SCREEN_DEBUGGER
+
+config PROSPECTOR_STATUS_SCREEN_DEBUGGER
+    bool "Debugger layout"
+    help
+        Debugger layout. Currently based on the Classic status screen.
 
 config PROSPECTOR_STATUS_SCREEN_CLASSIC
     bool "Classic layout"
