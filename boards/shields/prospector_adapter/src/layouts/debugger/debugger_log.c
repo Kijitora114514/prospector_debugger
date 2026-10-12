@@ -9,9 +9,9 @@
 #define LOG_TEXT_MAX_LENGTH 64
 #define LOG_ROW_HEIGHT 30
 #define LOG_ICON_SIZE 24
-#define LOG_ICON_X 12
-#define LOG_TEXT_X 40
-#define LOG_TEXT_WIDTH 172
+#define LOG_ICON_X 22
+#define LOG_TEXT_X 50
+#define LOG_TEXT_WIDTH 162
 
 struct debugger_log_entry {
     enum zmk_debugger_log_type type;
