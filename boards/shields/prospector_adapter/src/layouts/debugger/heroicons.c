@@ -2,13 +2,13 @@
 
 extern const lv_image_dsc_t connect;
 extern const lv_image_dsc_t disconnect;
-extern const lv_image_dsc_t exclamation;
+extern const lv_image_dsc_t warning;
 extern const lv_image_dsc_t error;
 extern const lv_image_dsc_t bug;
 extern const lv_image_dsc_t message;
-extern const lv_image_dsc_t battery_0;
-extern const lv_image_dsc_t battery_50;
-extern const lv_image_dsc_t battery_100;
+extern const lv_image_dsc_t battery0;
+extern const lv_image_dsc_t battery50;
+extern const lv_image_dsc_t battery100;
 
 static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
     switch (icon) {
@@ -17,7 +17,7 @@ static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
     case ZMK_HEROICON_DISCONNECT:
         return &disconnect;
     case ZMK_HEROICON_WARNING:
-        return &exclamation;
+        return &warning;
     case ZMK_HEROICON_ERROR:
         return &error;
     case ZMK_HEROICON_BUG:
@@ -25,11 +25,11 @@ static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
     case ZMK_HEROICON_MESSAGE:
         return &message;
     case ZMK_HEROICON_BATTERY_0:
-        return &battery_0;
+        return &battery0;
     case ZMK_HEROICON_BATTERY_50:
-        return &battery_50;
+        return &battery50;
     case ZMK_HEROICON_BATTERY_100:
-        return &battery_100;
+        return &battery100;
     default:
         return NULL;
     }
