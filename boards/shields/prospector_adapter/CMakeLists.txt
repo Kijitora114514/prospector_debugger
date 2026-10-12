@@ -19,8 +19,13 @@ if(CONFIG_SHIELD_PROSPECTOR_ADAPTER)
 
   if(CONFIG_PROSPECTOR_STATUS_SCREEN_DEBUGGER)
     file(GLOB layout_sources ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/*.c)
-    file(GLOB heroicon_sources ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/*.c)
+    set(heroicon_sources
+      ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/connect.c
+      ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/disconnect.c
+    )
     list(FILTER layout_sources EXCLUDE REGEX "status_screen\\.c$")
+    list(FILTER layout_sources EXCLUDE REGEX "output\\.c$")
+    list(FILTER layout_sources EXCLUDE REGEX "modifier_indicator\\.c$")
     zephyr_library_sources(${layout_sources} ${heroicon_sources})
   elseif(CONFIG_PROSPECTOR_STATUS_SCREEN_CLASSIC)
     file(GLOB layout_sources ${PROSPECTOR_SHIELD_DIR}/src/layouts/classic/*.c)

@@ -6,6 +6,7 @@
 struct zmk_widget_layer_roller {
     sys_snode_t node;
     lv_obj_t *obj;
+    lv_obj_t *label;
 };
 
 int zmk_widget_layer_roller_init(struct zmk_widget_layer_roller *widget, lv_obj_t *parent);
