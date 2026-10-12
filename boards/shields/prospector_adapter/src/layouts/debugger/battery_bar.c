@@ -7,6 +7,8 @@
 #include <zmk/events/split_central_status_changed.h>
 #include <zmk/event_manager.h>
 
+#include <fonts.h>
+
 #include "heroicons.h"
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
@@ -25,34 +27,53 @@ static bool connected[ZMK_SPLIT_BLE_PERIPHERAL_COUNT];
 static bool battery_known[ZMK_SPLIT_BLE_PERIPHERAL_COUNT];
 static uint8_t battery_levels[ZMK_SPLIT_BLE_PERIPHERAL_COUNT];
 
-static void set_battery_icon(lv_obj_t *widget_obj, uint8_t source) {
+static void set_battery_display(lv_obj_t *widget_obj, uint8_t source) {
     if (source >= ZMK_SPLIT_BLE_PERIPHERAL_COUNT) {
         return;
     }
 
-    lv_obj_t *image = lv_obj_get_child(widget_obj, source);
-    if (image == NULL) {
+    lv_obj_t *container = lv_obj_get_child(widget_obj, source);
+    if (container == NULL) {
+        return;
+    }
+
+    lv_obj_t *image = lv_obj_get_child(container, 0);
+    lv_obj_t *label = lv_obj_get_child(container, 1);
+    if (image == NULL || label == NULL) {
         return;
     }
 
     if (!connected[source]) {
+        lv_obj_add_flag(label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(image, LV_OBJ_FLAG_HIDDEN);
         zmk_heroicon_set(image, ZMK_HEROICON_DISCONNECT, lv_color_hex(0xFF0000));
     } else if (!battery_known[source]) {
+        lv_obj_add_flag(label, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(image, LV_OBJ_FLAG_HIDDEN);
         zmk_heroicon_set(image, ZMK_HEROICON_CONNECT, lv_color_white());
     } else if (battery_levels[source] <= 10) {
-        zmk_heroicon_set(image, ZMK_HEROICON_BATTERY_0, lv_color_hex(0xFFFF00));
+        lv_obj_add_flag(image, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(label, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text_fmt(label, "%d%%", battery_levels[source]);
+        lv_obj_set_style_text_color(label, lv_color_hex(0xFFFF00), LV_PART_MAIN);
     } else if (battery_levels[source] <= 80) {
-        zmk_heroicon_set(image, ZMK_HEROICON_BATTERY_50, lv_color_hex(0x00FF00));
+        lv_obj_add_flag(image, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(label, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text_fmt(label, "%d%%", battery_levels[source]);
+        lv_obj_set_style_text_color(label, lv_color_hex(0x00FF00), LV_PART_MAIN);
     } else {
-        zmk_heroicon_set(image, ZMK_HEROICON_BATTERY_100, lv_color_hex(0x0000FF));
+        lv_obj_add_flag(image, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(label, LV_OBJ_FLAG_HIDDEN);
+        lv_label_set_text_fmt(label, "%d%%", battery_levels[source]);
+        lv_obj_set_style_text_color(label, lv_color_hex(0x0000FF), LV_PART_MAIN);
     }
 }
 
-static void update_battery_icons(uint8_t source) {
+static void update_battery_displays(uint8_t source) {
     struct zmk_widget_battery_bar *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) {
         if (widget->initialized) {
-            set_battery_icon(widget->obj, source);
+            set_battery_display(widget->obj, source);
         }
     }
 }
@@ -63,7 +84,7 @@ void battery_bar_battery_update_cb(struct battery_update_state state) {
     }
     battery_levels[state.source] = state.level;
     battery_known[state.source] = true;
-    update_battery_icons(state.source);
+    update_battery_displays(state.source);
 }
 
 static struct battery_update_state battery_bar_get_battery_state(const zmk_event_t *eh) {
@@ -88,7 +109,7 @@ void battery_bar_connection_update_cb(struct connection_update_state state) {
         return;
     }
     connected[state.source] = state.connected;
-    update_battery_icons(state.source);
+    update_battery_displays(state.source);
 }
 
 static struct connection_update_state battery_bar_get_connection_state(const zmk_event_t *eh) {
@@ -128,11 +149,23 @@ int zmk_widget_battery_bar_init(struct zmk_widget_battery_bar *widget, lv_obj_t 
     lv_obj_set_style_pad_hor(widget->obj, 16, LV_PART_MAIN);
 
     for (int i = 0; i < ZMK_SPLIT_BLE_PERIPHERAL_COUNT; i++) {
-        lv_obj_t *image = lv_image_create(widget->obj);
+        lv_obj_t *container = lv_obj_create(widget->obj);
+        lv_obj_set_size(container, 48, 48);
+        lv_obj_set_style_bg_opa(container, LV_OPA_TRANSP, LV_PART_MAIN);
+        lv_obj_set_style_border_width(container, 0, LV_PART_MAIN);
+        lv_obj_set_style_pad_all(container, 0, LV_PART_MAIN);
+
+        lv_obj_t *image = lv_image_create(container);
         lv_obj_set_size(image, 48, 48);
         lv_obj_set_style_bg_opa(image, LV_OPA_TRANSP, LV_PART_MAIN);
         lv_obj_set_style_pad_all(image, 0, LV_PART_MAIN);
-        set_battery_icon(widget->obj, i);
+
+        lv_obj_t *label = lv_label_create(container);
+        lv_obj_set_style_text_font(label, &FG_Medium_20, LV_PART_MAIN);
+        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
+        lv_obj_center(label);
+
+        set_battery_display(widget->obj, i);
     }
 
     sys_slist_append(&widgets, &widget->node);

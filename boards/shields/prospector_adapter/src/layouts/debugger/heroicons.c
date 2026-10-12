@@ -6,9 +6,6 @@ extern const lv_image_dsc_t warning;
 extern const lv_image_dsc_t error;
 extern const lv_image_dsc_t bug;
 extern const lv_image_dsc_t message;
-extern const lv_image_dsc_t battery0;
-extern const lv_image_dsc_t battery50;
-extern const lv_image_dsc_t battery100;
 
 static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
     switch (icon) {
@@ -24,12 +21,6 @@ static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
         return &bug;
     case ZMK_HEROICON_MESSAGE:
         return &message;
-    case ZMK_HEROICON_BATTERY_0:
-        return &battery0;
-    case ZMK_HEROICON_BATTERY_50:
-        return &battery50;
-    case ZMK_HEROICON_BATTERY_100:
-        return &battery100;
     default:
         return NULL;
     }
