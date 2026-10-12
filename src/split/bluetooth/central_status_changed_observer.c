@@ -126,6 +126,7 @@ static void split_central_process_connection(struct bt_conn *conn) {
     raise_zmk_split_central_status_changed((struct zmk_split_central_status_changed){
         .slot = psptr_peripheral_slot_index_for_conn(conn),
         .connected = true,
+        .reason = BT_HCI_ERR_SUCCESS,
     });
 }
 
@@ -170,6 +171,7 @@ static void split_central_disconnected(struct bt_conn *conn, uint8_t reason) {
     raise_zmk_split_central_status_changed((struct zmk_split_central_status_changed){
         .slot = psptr_peripheral_slot_index_for_conn(conn),
         .connected = false,
+        .reason = reason,
     });
 
     // k_msleep(100);

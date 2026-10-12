@@ -11,6 +11,7 @@
 
 #include <fonts.h>
 
+#include "ble_reconnect_monitor.h"
 #include "debugger_log.h"
 #include "heroicons.h"
 
@@ -115,6 +116,12 @@ void battery_bar_connection_update_cb(struct connection_update_state state) {
 
     connected[state.source] = state.connected;
     update_battery_displays(state.source);
+
+#if IS_ENABLED(CONFIG_ZMK_SPLIT) && IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
+    if (state.connected && zmk_debugger_reconnect_monitor_log_if_pending(state.source)) {
+        return;
+    }
+#endif
 
     char text[20];
     snprintf(text, sizeof(text), state.connected ? "P%d Connect" : "P%d Disconnect",

@@ -6,6 +6,7 @@
 struct zmk_split_central_status_changed {
     uint8_t slot;
     bool connected;
+    uint8_t reason;
 };
 
 ZMK_EVENT_DECLARE(zmk_split_central_status_changed);
