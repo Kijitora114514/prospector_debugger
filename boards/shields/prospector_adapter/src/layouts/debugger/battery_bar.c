@@ -51,7 +51,7 @@ static void set_battery_display(lv_obj_t *widget_obj, uint8_t source) {
         lv_obj_add_flag(label, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(image, LV_OBJ_FLAG_HIDDEN);
         zmk_heroicon_set(image, ZMK_HEROICON_DISCONNECT, lv_color_hex(0xFF0000));
-    } else if (!battery_known[source]) {
+    } else if (!battery_known[source] || battery_levels[source] >= 100) {
         lv_obj_add_flag(label, LV_OBJ_FLAG_HIDDEN);
         lv_obj_remove_flag(image, LV_OBJ_FLAG_HIDDEN);
         zmk_heroicon_set(image, ZMK_HEROICON_CONNECT, lv_color_white());
@@ -117,7 +117,7 @@ void battery_bar_connection_update_cb(struct connection_update_state state) {
     update_battery_displays(state.source);
 
     char text[20];
-    snprintf(text, sizeof(text), state.connected ? "Connect P %d" : "Disconnect P %d",
+    snprintf(text, sizeof(text), state.connected ? "P%d Connect" : "P%d Disconnect",
              state.source + 1);
     zmk_debugger_log_add(state.connected ? ZMK_DEBUGGER_LOG_CONNECT
                                          : ZMK_DEBUGGER_LOG_DISCONNECT,

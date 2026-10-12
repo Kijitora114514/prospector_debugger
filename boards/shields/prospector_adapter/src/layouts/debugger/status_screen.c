@@ -22,11 +22,11 @@ lv_obj_t *zmk_display_status_screen() {
 
     zmk_widget_battery_bar_init(&battery_bar_widget, screen);
     lv_obj_set_size(zmk_widget_battery_bar_obj(&battery_bar_widget), 64, 176);
-    lv_obj_align(zmk_widget_battery_bar_obj(&battery_bar_widget), LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_align(zmk_widget_battery_bar_obj(&battery_bar_widget), LV_ALIGN_TOP_RIGHT, -5, 0);
 
     zmk_widget_layer_roller_init(&layer_roller_widget, screen);
     lv_obj_set_size(zmk_widget_layer_roller_obj(&layer_roller_widget), 64, 58);
-    lv_obj_align(zmk_widget_layer_roller_obj(&layer_roller_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+    lv_obj_align(zmk_widget_layer_roller_obj(&layer_roller_widget), LV_ALIGN_BOTTOM_RIGHT, -5, 0);
 
     zmk_debugger_log_add(ZMK_DEBUGGER_LOG_MESSAGE, "Good Morning.");
 

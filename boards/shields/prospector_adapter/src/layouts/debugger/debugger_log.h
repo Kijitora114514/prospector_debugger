@@ -3,7 +3,7 @@
 #include <lvgl.h>
 #include <zephyr/kernel.h>
 
-#define ZMK_DEBUGGER_LOG_MAX_ENTRIES 8
+#define ZMK_DEBUGGER_LOG_MAX_ENTRIES 7
 
 enum zmk_debugger_log_type {
     ZMK_DEBUGGER_LOG_MESSAGE,

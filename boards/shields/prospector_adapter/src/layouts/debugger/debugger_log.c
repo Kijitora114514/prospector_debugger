@@ -8,9 +8,10 @@
 
 #define LOG_TEXT_MAX_LENGTH 64
 #define LOG_ROW_HEIGHT 30
+#define LOG_TOP_MARGIN 15
 #define LOG_ICON_SIZE 24
-#define LOG_ICON_X 22
-#define LOG_TEXT_X 50
+#define LOG_ICON_X 17
+#define LOG_TEXT_X 45
 #define LOG_TEXT_WIDTH 162
 
 struct debugger_log_entry {
@@ -74,7 +75,7 @@ static void refresh_all_widgets(void) {
     }
 }
 
-// text:max 15 chars
+// text:max 14 chars
 void zmk_debugger_log_add(enum zmk_debugger_log_type type, const char *text) {
     if (text == NULL) {
         return;
@@ -106,7 +107,7 @@ int zmk_widget_debugger_log_init(struct zmk_widget_debugger_log *widget, lv_obj_
     for (uint8_t i = 0; i < ZMK_DEBUGGER_LOG_MAX_ENTRIES; i++) {
         widget->rows[i] = lv_obj_create(widget->obj);
         lv_obj_set_size(widget->rows[i], 212, LOG_ROW_HEIGHT);
-        lv_obj_set_pos(widget->rows[i], 0, i * LOG_ROW_HEIGHT);
+        lv_obj_set_pos(widget->rows[i], 0, LOG_TOP_MARGIN + i * LOG_ROW_HEIGHT);
         lv_obj_set_style_bg_opa(widget->rows[i], LV_OPA_TRANSP, LV_PART_MAIN);
         lv_obj_set_style_border_width(widget->rows[i], 0, LV_PART_MAIN);
         lv_obj_set_style_pad_all(widget->rows[i], 0, LV_PART_MAIN);
