@@ -9,6 +9,8 @@ enum zmk_debugger_log_type {
     ZMK_DEBUGGER_LOG_MESSAGE,
     ZMK_DEBUGGER_LOG_WARNING,
     ZMK_DEBUGGER_LOG_ERROR,
+    ZMK_DEBUGGER_LOG_CONNECT,
+    ZMK_DEBUGGER_LOG_DISCONNECT,
 };
 
 struct zmk_widget_debugger_log {

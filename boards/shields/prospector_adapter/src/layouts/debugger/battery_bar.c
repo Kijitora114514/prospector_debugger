@@ -1,5 +1,7 @@
 #include "battery_bar.h"
 
+#include <stdio.h>
+
 #include <zmk/display.h>
 #include <zmk/battery.h>
 #include <zmk/ble.h>
@@ -9,6 +11,7 @@
 
 #include <fonts.h>
 
+#include "debugger_log.h"
 #include "heroicons.h"
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
@@ -21,6 +24,7 @@ struct battery_update_state {
 struct connection_update_state {
     uint8_t source;
     bool connected;
+    bool valid;
 };
 
 static bool connected[ZMK_SPLIT_BLE_PERIPHERAL_COUNT];
@@ -105,27 +109,36 @@ static struct battery_update_state battery_bar_get_battery_state(const zmk_event
 }
 
 void battery_bar_connection_update_cb(struct connection_update_state state) {
-    if (state.source >= ZMK_SPLIT_BLE_PERIPHERAL_COUNT) {
+    if (!state.valid || state.source >= ZMK_SPLIT_BLE_PERIPHERAL_COUNT) {
         return;
     }
+
     connected[state.source] = state.connected;
     update_battery_displays(state.source);
+
+    char text[20];
+    snprintf(text, sizeof(text), state.connected ? "Connect P %d" : "Disconnect P %d",
+             state.source + 1);
+    zmk_debugger_log_add(state.connected ? ZMK_DEBUGGER_LOG_CONNECT
+                                         : ZMK_DEBUGGER_LOG_DISCONNECT,
+                         text);
 }
 
 static struct connection_update_state battery_bar_get_connection_state(const zmk_event_t *eh) {
     if (eh == NULL) {
-        return (struct connection_update_state){.source = 0, .connected = false};
+        return (struct connection_update_state){.valid = false};
     }
 
     const struct zmk_split_central_status_changed *conn_ev =
         as_zmk_split_central_status_changed(eh);
     if (conn_ev == NULL) {
-        return (struct connection_update_state){.source = 0, .connected = false};
+        return (struct connection_update_state){.valid = false};
     }
 
     return (struct connection_update_state){
         .source = conn_ev->slot,
         .connected = conn_ev->connected,
+        .valid = true,
     };
 }
 

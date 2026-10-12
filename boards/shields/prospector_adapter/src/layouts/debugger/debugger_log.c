@@ -28,6 +28,10 @@ static enum zmk_heroicon icon_for_type(enum zmk_debugger_log_type type) {
         return ZMK_HEROICON_WARNING;
     case ZMK_DEBUGGER_LOG_ERROR:
         return ZMK_HEROICON_ERROR;
+    case ZMK_DEBUGGER_LOG_CONNECT:
+        return ZMK_HEROICON_CONNECT;
+    case ZMK_DEBUGGER_LOG_DISCONNECT:
+        return ZMK_HEROICON_DISCONNECT;
     case ZMK_DEBUGGER_LOG_MESSAGE:
     default:
         return ZMK_HEROICON_MESSAGE;
@@ -39,7 +43,10 @@ static lv_color_t color_for_type(enum zmk_debugger_log_type type) {
     case ZMK_DEBUGGER_LOG_WARNING:
         return lv_color_hex(0xFFFF00);
     case ZMK_DEBUGGER_LOG_ERROR:
+    case ZMK_DEBUGGER_LOG_DISCONNECT:
         return lv_color_hex(0xFF0000);
+    case ZMK_DEBUGGER_LOG_CONNECT:
+        return lv_color_white();
     case ZMK_DEBUGGER_LOG_MESSAGE:
     default:
         return lv_color_white();
@@ -67,6 +74,7 @@ static void refresh_all_widgets(void) {
     }
 }
 
+// text:max 15 chars
 void zmk_debugger_log_add(enum zmk_debugger_log_type type, const char *text) {
     if (text == NULL) {
         return;
