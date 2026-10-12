@@ -2,9 +2,11 @@
 
 #include "layer_roller.h"
 #include "battery_bar.h"
+#include "debugger_log.h"
 
 static struct zmk_widget_layer_roller layer_roller_widget;
 static struct zmk_widget_battery_bar battery_bar_widget;
+static struct zmk_widget_debugger_log debugger_log_widget;
 
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
@@ -14,14 +16,9 @@ lv_obj_t *zmk_display_status_screen() {
     lv_obj_set_style_pad_all(screen, 0, LV_PART_MAIN);
     lv_obj_remove_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
 
-    /* Reserved for the future log display. */
-    lv_obj_t *log_area = lv_obj_create(screen);
-    lv_obj_set_size(log_area, 212, 240);
-    lv_obj_align(log_area, LV_ALIGN_LEFT_MID, 0, 0);
-    lv_obj_set_style_bg_opa(log_area, LV_OPA_TRANSP, LV_PART_MAIN);
-    lv_obj_set_style_border_width(log_area, 0, LV_PART_MAIN);
-    lv_obj_set_style_pad_all(log_area, 0, LV_PART_MAIN);
-    lv_obj_remove_flag(log_area, LV_OBJ_FLAG_SCROLLABLE);
+    zmk_widget_debugger_log_init(&debugger_log_widget, screen);
+    lv_obj_set_size(zmk_widget_debugger_log_obj(&debugger_log_widget), 212, 240);
+    lv_obj_align(zmk_widget_debugger_log_obj(&debugger_log_widget), LV_ALIGN_LEFT_MID, 0, 0);
 
     zmk_widget_battery_bar_init(&battery_bar_widget, screen);
     lv_obj_set_size(zmk_widget_battery_bar_obj(&battery_bar_widget), 64, 176);
@@ -30,6 +27,8 @@ lv_obj_t *zmk_display_status_screen() {
     zmk_widget_layer_roller_init(&layer_roller_widget, screen);
     lv_obj_set_size(zmk_widget_layer_roller_obj(&layer_roller_widget), 64, 58);
     lv_obj_align(zmk_widget_layer_roller_obj(&layer_roller_widget), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
+
+    zmk_debugger_log_add(ZMK_DEBUGGER_LOG_MESSAGE, "Good Morning.");
 
     return screen;
 }

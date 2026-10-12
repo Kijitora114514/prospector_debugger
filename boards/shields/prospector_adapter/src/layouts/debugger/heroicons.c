@@ -2,6 +2,9 @@
 
 extern const lv_image_dsc_t connect;
 extern const lv_image_dsc_t disconnect;
+extern const lv_image_dsc_t message;
+extern const lv_image_dsc_t warning;
+extern const lv_image_dsc_t error;
 
 static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
     switch (icon) {
@@ -9,6 +12,12 @@ static const lv_image_dsc_t *get_icon(enum zmk_heroicon icon) {
         return &connect;
     case ZMK_HEROICON_DISCONNECT:
         return &disconnect;
+    case ZMK_HEROICON_MESSAGE:
+        return &message;
+    case ZMK_HEROICON_WARNING:
+        return &warning;
+    case ZMK_HEROICON_ERROR:
+        return &error;
     default:
         return NULL;
     }

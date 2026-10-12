@@ -22,6 +22,9 @@ if(CONFIG_SHIELD_PROSPECTOR_ADAPTER)
     set(heroicon_sources
       ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/connect.c
       ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/disconnect.c
+      ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/message.c
+      ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/warning.c
+      ${PROSPECTOR_SHIELD_DIR}/src/layouts/debugger/lvgl/error.c
     )
     list(FILTER layout_sources EXCLUDE REGEX "status_screen\\.c$")
     list(FILTER layout_sources EXCLUDE REGEX "output\\.c$")
